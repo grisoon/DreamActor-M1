@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="DreamActor-M1: Holistic, Expressive and Robust Human Image Animation with Hybrid Guidance.">
+  <meta name="keywords" content="Animation, Diffusion Transformer, Video Generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DreamActor-M1: Holistic, Expressive and Robust Human Image Animation with Hybrid Guidance</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .section {
+      margin-top: 0rem; /* 增加章节之间的间距 */
+      margin-bottom: 0rem; /* 增加章节之间的间距 */
+    }
+
+    .content {
+      margin-bottom: 0rem; /* 减小章节内的间距 */
+    }
+
+    h2.title {
+      margin-bottom: 0rem; /* 恢复章节标题和正文之间的间距 */
+    }
+  </style>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title"><span class="rainbow-text">DreamActor-M1</span>: Holistic, Expressive and Robust Human Image Animation with Hybrid Guidance</h1>
+          <h1 class="title is-4 publication-title"></h1>
+          <div class="is-size-5 publication-authors">
+
+            <span class="author-block">
+              <a href="">Yuxuan Luo</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Zhengkun Rong</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Lizhen Wang</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <!-- <a href="https://scholar.google.com/citations?user=qkJD6c0AAAAJ">Longhao Zhang</a><sup>*</sup>, -->
+              <a href="">Longhao Zhang</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <!-- <a href="https://scholar.google.com/citations?hl=en&user=BIixVT0AAAAJ">Tianshu Hu</a><sup>*†</sup> -->
+              <a href="">Tianshu Hu</a><sup>*†</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Yongming Zhu</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Bytedance Intelligent Creation</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="eql-cntrb"><Small><sup>*</sup>Equal Contribution</Small></span>
+            <span class="eql-cntrb"><Small><sup>†</sup>Corresponding Author</Small></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-fullhd">
+    <div class="hero-body">
+      <h2 class="subtitle has-text-justified">
+        <p>
+          We present <span class="dnerf">DreamActor-M1</span>, a DiT-based human animation framework, with hybrid guidance to achieve fine-grained holistic controllability, multi-scale adaptability, and long-term temporal coherence.
+          Given a reference image, <span class="dnerf">DreamActor-M1</span> can imitate human behaviors captured from videos, producing highly expressive and realistic human videos cross multiple scales, ranging from portrait to full-body animations. The resultant video is temporally consistent, identity-preserved, and of high fidelity.
+        </p>
+      </h2>
+
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item">
+          <video id="teaser1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/1.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/2.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser3" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/3.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser4" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/4.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser5" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/5.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser6" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/6.mov" type="video/mp4">
+          </video>
+        </div>
+        <!-- <div class="item">
+          <video id="teaser7" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/7.mov" type="video/mp4">
+          </video>
+        </div> -->
+        <div class="item">
+          <video id="teaser8" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/8.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser9" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/9.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser10" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/10.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser11" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/11.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser12" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/12.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser10" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/13.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser11" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/14.mov" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video id="teaser12" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/15.mov" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-4">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            While recent image-based human animation methods achieve realistic body and facial motion synthesis, critical gaps remain in fine-grained holistic controllability, multi-scale adaptability, and long-term temporal coherence, which leads to their lower expressiveness and robustness. We propose a diffusion transformer (DiT) based framework, <span class="dnerf">DreamActor-M1</span>, with hybrid guidance to overcome these limitations. For motion guidance, our hybrid control signals that integrate implicit facial representations, 3D head spheres, and 3D body skeletons achieve robust control of facial expressions and body movements, while producing expressive and identity-preserving animations. For scale adaptation, to handle various body poses and image scales ranging from portraits to full-body views, we employ a progressive training strategy using data with varying resolutions and scales. For appearance guidance, we integrate motion patterns from sequential frames with complementary visual references, ensuring long-term temporal coherence for unseen regions during complex movements. Experiments demonstrate that our method outperforms the state-of-the-art works, delivering expressive results for portraits, upper-body, and full-body generation with robust long-term consistency.          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Method Illustration. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-4">Method Overview</h2>
+        <img src="./static/images/2-overview.png"
+         class="interpolation-image"
+         alt="Interpolate start reference image."/>
+        <div class="content has-text-justified">
+        <p>
+          Overview of <span class="dnerf">DreamActor-M1</span>. During the training stage, we first extract body skeletons and head spheres from driving frames and then encode them to the pose latent using the pose encoder. The resultant pose latent is combined with the noised video latent along the channel dimension. The video latent is obtained by encoding a clip from the input full video using 3D VAE. Facial expression is additionally encoded by the face motion encoder, to generate implicit facial representations. Note that the reference image can be one or multiple frames sampled from the input video to provide additional appearance details during training and the reference token branch shares weights of our DiT model with the noise token branch. Finally, the denoised video latent is supervised by the encoded video latent. Within each DiT block, the face motion token is integrated into the noise token branch via cross-attention (Face Attn), while appearance information of ref token is injected to noise token through concatenated self-attention (Self Attn) and subsequent cross-attention (Ref Attn).
+        </p>
+      </div>
+    </div>
+    <!--/ Method Illustration. -->
+
+    <!-- Paper video. -->
+<!--     <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-fullhd">
+    <!-- Diversity Section -->
+    <h2 class="title is-3">Diversity</h2>
+    <div class="content has-text-justified">
+      <p class="is-size-4">
+        Our method is robust to various character and motion styles.
+      </p>
+    </div>
+
+    <div id="diversity-carousel" class="carousel results-carousel">
+      <div class="item">
+        <video id="diversity1" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-1.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity2" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-2.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity3" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-3.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity4" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-4.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity5" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-5.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity6" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-6.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity7" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-7.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="diversity8" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/diversity-8.mov" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Out-of-Distribution Section -->
+    <h2 class="title is-3" style="margin-top: 4rem;">Controllability and Robustness</h2>
+
+    <div id="control-carousel" class="carousel results-carousel">
+      <!-- Unit 1 -->
+      <div class="item control-item">
+        <div class="content has-text-justified">
+          <p class="is-size-4">
+            Our method supports to only transfer a part of the motion, such as facial expressions and head movements.
+          </p>
+        </div>
+        <video id="control1" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/control-1.mov" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Unit 2 -->
+      <div class="item control-item">
+        <div class="content has-text-justified">
+          <p class="is-size-4">
+            Our method supports to generate results under different head pose directions.
+          </p>
+        </div>
+        <video id="control2" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/control-2.mov" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Unit 3 -->
+      <div class="item control-item">
+        <div class="content has-text-justified">
+          <p class="is-size-4">
+            Our method can extend to audio-driven facial animation, delivering lip-sync results in multiple languages.
+          </p>
+        </div>
+        <video id="control3" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/control-3.mov" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Unit 4 -->
+      <div class="item control-item">
+        <div class="content has-text-justified">
+          <p class="is-size-4">
+            Our method can adapt shape-aware animations via bone length adjustment techniques.
+          </p>
+        </div>
+        <video id="control4" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/control-4.mov" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Unit 5 -->
+      <div class="item control-item">
+        <div class="content has-text-justified">
+          <p class="is-size-4">
+            Our complementary visual guidance ensures better temporal consistency, particularly for human poses not observed in the reference.
+          </p>
+        </div>
+        <video id="control5" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/control-5.mov" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+
+    <h2 class="title is-3" style="margin-top: 1rem;">Comparing to SOTA Methods</h2>
+    
+    <!-- 添加描述文字 -->
+    <div class="content has-text-justified">
+      <p class="is-size-4">
+        Our method generates results with fine-grained motions, identity preservation, temporal consistency and high fidelity.
+      </p>
+    </div>
+
+    <!-- Pose Transfer -->
+    <h2 class="title is-4">Pose Transfer</h2>
+
+    <div id="pose-carousel" class="carousel results-carousel">
+      <div class="item">
+        <video id="pose1" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/pose-1.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="pose2" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/pose-2.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="pose3" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/pose-3.mov" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+
+    <!-- Portrait Animation -->
+    <h2 class="title is-4" style="margin-top: 3rem;">Portrait Animation</h2>
+
+    <div id="portrait-carousel" class="carousel results-carousel">
+      <div class="item">
+        <video id="portrait1" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/portrait-1.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="portrait2" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/portrait-2.mov" type="video/mp4">
+        </video>
+      </div>
+      <div class="item">
+        <video id="portrait3" autoplay controls muted loop playsinline height="100%">
+          <source src="./static/videos/portrait-3.mov" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <h2 class="title is-4">Ethics Concerns</h2>
+          <p>
+            The images and videos used in demos are sourced from public domains or generated by models, and are intended solely to showcase the capabilities of this research. Please contact us (hutianshu007@gmail.com) if there are any concerns, and we will delete it in time.
+          </p>
+          
+          <h2 class="title is-4">Acknowledgement</h2>
+          <p>
+            This website is built using the 
+            <a rel="license" href="https://github.com/nerfies/nerfies.github.io">Academic Project Page Template</a>.
+            We would like to thank  <a href="https://nerfies.github.io/">Nerfies</a> for providing the source code.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
+
+
+<!-- <footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.mov">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html> -->
